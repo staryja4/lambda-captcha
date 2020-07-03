@@ -1,4 +1,5 @@
 import { ILambdaCaptchaConfig } from "./config";
+import { LambdaCaptchaCodeExpression } from './expressions/code-expression';
 import { ILambdaCaptchaExpression } from "./expressions/types";
 import { renderText } from "./font";
 import { LambdaCaptchaMathExpression } from "./expressions/math-expression";
@@ -30,6 +31,9 @@ export function create(config: ILambdaCaptchaConfig): ILambdaCaptcha {
   let captcha: ILambdaCaptchaExpression;
 
   switch (config.mode) {
+    case "code":
+      captcha = LambdaCaptchaCodeExpression.generate(config.codeLength);
+      break;
     case "math":
       captcha = LambdaCaptchaMathExpression.generate(2);
       break;
@@ -81,6 +85,13 @@ export function verify(
   }
 
   switch (captcha.type) {
+    case "code":
+      const codeExpression = LambdaCaptchaCodeExpression.fromJSON(captcha);
+
+      if (codeExpression.solve() == solution) {
+        return true;
+      }
+      return errors.INVALID_SOLUTION;
     case "math":
       const mathExpression = LambdaCaptchaMathExpression.fromJSON(captcha);
 

@@ -1,6 +1,6 @@
 {
-  "name": "lambda-captcha",
-  "version": "2.1.0",
+  "name": "@solargis/lambda-captcha",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
